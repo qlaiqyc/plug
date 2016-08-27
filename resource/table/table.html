@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+	<style>
+		.mins-btn-green{padding: 4px 23px 4px; background-color: #72d9c0; color: white; border-radius: 3px; cursor: pointer;}
+    	
+		.plug-table{width: 1157px;   margin: 37px 27px;color: #8d8d8d;}
+    	.plug-table thead tr{background-color: #d4d4d4; height: 35px;text-align: center;}
+    	.plug-table tbody tr{height: 53px;text-align: center;border-bottom: 1px solid #d4d4d4;}
+	</style>
+	</head>
+	<body>
+		 <table id="mins-monitor-task" class="plug-table"> 
+     	</table> 
+	</body>
+	<script   src="../base/jquery-2.1.0.js"></script>
+	<script   src="../base/base.js" ></script>
+	<script   src="table.js" ></script>
+	<script>
+	
+	var list4table = function(){
+ 		
+ 		var list = [];
+ 		
+ 		for(var i =0 ;i<6;i++){
+ 			var obj = {};
+ 			obj.taskid   = "D7FJ97667H";
+ 			obj.tasktime = "2016-08-11  16:30";
+ 			obj.taskobj	 = i+"条链接";
+ 			
+ 			list.push(obj);
+ 		}
+ 		
+ 		return list;
+ 	};
+ 	
+ 	var list4table2 = function(){
+ 		
+ 		var list = [];
+ 		
+ 		for(var i =0 ;i<6;i++){
+ 			var obj = {};
+ 			obj.taskid   = "222";
+ 			obj.tasktime = "2016-08-11  16:30";
+ 			obj.taskobj	 = i+"条链接";
+ 			
+ 			list.push(obj);
+ 		}
+ 		
+ 		return list;
+ 	};
+ 	
+ 	
+ 	var formatter4OP = function(obj,value){
+ 		
+ 		return "<span class='mins-btn-green'>查看详情</span>"
+ 	};
+ 	
+ 	$("#mins-monitor-task").qltable({
+ 		
+ 		colors:[],
+ 		columns:[{title:"任务编号",filed:"taskid"},
+ 				 {title:"检测对象",filed:"taskobj"},
+ 				 {title:"提交时间",filed:"tasktime"},
+ 				 {title:"操作"	  ,filed:"",formatter:formatter4OP}
+ 				],
+ 		
+ 		data:list4table(),
+ 		
+ 	});
+ 	
+ 	$("#mins-monitor-task").qltable({"load":list4table2()});
+ 	 
+ 
+		
+		
+	</script>
+
+</html>
