@@ -43,7 +43,7 @@
  		
  		for(var i =0 ;i<6;i++){
  			var obj = {};
- 			obj.taskid   = "222";
+ 			obj.taskid   = "222"+i;
  			obj.tasktime = "2016-08-11  16:30";
  			obj.taskobj	 = i+"条链接";
  			
@@ -65,14 +65,16 @@
  		columns:[{title:"任务编号",filed:"taskid"},
  				 {title:"检测对象",filed:"taskobj"},
  				 {title:"提交时间",filed:"tasktime"},
- 				 {title:"操作"	  ,filed:"",formatter:formatter4OP}
+ 				 {title:"操作" ,	 filed:"",formatter:formatter4OP}
  				],
  		
  		data:list4table(),
  		
  	});
  	
- 	$("#mins-monitor-task").qltable({"load":list4table2()});
+ 	//$("#mins-monitor-task").qltable({"load":list4table2()});
+ 	
+ 	$("#mins-monitor-task").qltable({"append":{id:1,data:[list4table2()[2]]}});
  	 
  
 		
