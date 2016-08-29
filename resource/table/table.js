@@ -8,8 +8,8 @@
   	
   	
   	PageInfo.init = function(option){
-  		var FunUtil = {};//对内的工具类
-	  	var HtmUtil = {};//对内的Html
+  		var FunUtil	= {};//对内的工具类
+	  	var HtmUtil	= {};//对内的Html
 	  	var PageObj	= {};//对外暴露的方法
 	  	
 	  	/*************HtmUtil 工具类************************** */
