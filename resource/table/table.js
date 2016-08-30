@@ -8,8 +8,8 @@
   	
   	
   	PageInfo.init = function(option){
-  		var FunUtil	= {};//对内的工具类
-	  	var HtmUtil	= {};//对内的Html
+  		var FunUtil = {};//对内的工具类
+	  	var HtmUtil = {};//对内的Html
 	  	var PageObj	= {};//对外暴露的方法
 	  	
 	  	/*************HtmUtil 工具类************************** */
@@ -21,7 +21,7 @@
 	 		var len4col = columns.length;
 	 		var buf  	= new StringBuffer();
 	  		
-	  		var id4index= FunUtil.indexNum(option.param.id); 
+	  		var id4index= FunUtil.cache4getLen(); 
 	  		
 	  		if(len4data === 0) return;
 	 		
@@ -83,22 +83,83 @@
 	  	
 	  	FunUtil.indexNum	= function(index){
 	  		var  list  = (index+"").split("-");
-	  		var  value = list[list.length-1];
+	  		var  len   = list.length;
+	  		var  value = list[len-1];
 	  		
-	  		if(value == 9) {
-	  				list.push("1")
-		  		}else{
-		  			
-		  			list[list.length-1] = (parseInt(value)+1);
+	  		if(value == 9 || len ==1) {
+				list.push("1")
+		  	}else{
+	  			list[list.length-1] = (parseInt(value)+1);
 		  	};
 	  		
 	  		return list.join("-");
 	  	}
 	  	
-	  	//更新数据缓存
-	  	FunUtil.cache4update = function(option){
+	  	
+	  	//得到缓存数据
+	  	FunUtil.cache4get = function(){
+	  		
+	  	  return $table.data("qltable-option");
+	  	};
+	  	FunUtil.cache4getLen = function(){
+	  		
+	  	  return $table.data("qltable-option").data.length;
+	  	};
+	  	
+	  	/****************更新数据缓存****************/
+	  	
+	  	FunUtil.cache4init = function(option){
+	  		var Map = {};
+	  		
+	  		var data = option.param;
+	  		
+	  		$(data).each(function(i,obj){
+	  			Map[i] = obj;
+	  		});
+	  		
+	  		option.Map = Map;  
 	  		
 	  		$table.data("qltable-option",option);
+	  	};
+	  	
+	  	FunUtil.cache4append = function(option){
+	  		var cache 	= FunUtil.cache4get();
+	  		var Map 	= cache.Map;
+	  		var data 	= cache.data;
+	  		var obj 	= option.param[0];
+	  		var id4index= (data.length +1);
+	  		
+	  		Map[id4index] = obj;
+	  		
+	  		cache.Map 	= Map;
+	  		//cache.data.push(obj);
+	  		
+	  		$table.data("qltable-option",cache);
+	  	};
+	  	
+	  	FunUtil.cache4prepend = function(option){
+	  		FunUtil.cache4append(option);
+	  	};
+	  	
+	  	
+	  	FunUtil.cache4update = function(option){
+	  		FunUtil.cache4append(option);
+	  		FunUtil.cache4del(option.param.id);
+	  	};
+	  	
+	  	FunUtil.cache4del = function(str){
+	  		var cache 	= FunUtil.cache4get();
+	  		var Map		= cache.Map;
+	  		
+	  		delete Map[str];
+	  		
+	  		cache.Map  = Map;
+	  		
+	  	    $table.data("qltable-option",cache);
+	  	};
+	  	
+	  	FunUtil.cache4load = function(option){
+	  		FunUtil.cache4init(option);
 	  	};
 	  	
 	  	/*************PageObj操作类************************************/
@@ -118,7 +179,7 @@
 		 		
 		 		buf.append('<tr  data-index="'+i+'">');  //主要是针对，delete  update  append prepend
 		 		
-		 		for(var j=0;j<len4col;j++){
+		 		for(var j = 0; j < len4col; j++){
 					
 					var value = "";
 					
@@ -134,7 +195,7 @@
 		 		
 	  		$table.find("tbody").html(buf.toString());
 	  		
-	  		FunUtil.cache4update(option)
+	  		FunUtil.cache4load(option);
 	  	};
 	  	
 	  	
@@ -144,16 +205,40 @@
 	  	 * ********************/
 	  	PageObj.append  = function(option){
 	  		var param = option.param;
-			
 			var $this = $table.find("tr[data-index='"+param.id+"']");
 	  		
 	  		$this.after(HtmUtil.addTrs(option));
+	  		
+	  		 
+	  		FunUtil.cache4append(option);
 	  	};
 	  	
-	  	PageObj.prepend = function(){};
+	  	PageObj.prepend = function(option){
+	  		var param = option.param;
+			var $this = $table.find("tr[data-index='"+param.id+"']");
+	  		
+	  		$this.before(HtmUtil.addTrs(option));
+	  		
+	  		FunUtil.cache4prepend(option);
+	  	};
 	  	
-	  	PageObj.delect	= function(){};
-	  	PageObj.update	= function(){};
+	  	PageObj.delete	= function(option){
+	  		//删除列表以逗号分割
+	  		
+	  		var param = option.param;
+	  		
+	  		var $this = $table.find("tr[data-index='"+param.id+"']");
+	  		
+	  		$this.remove();
+	  		
+	  		FunUtil.cache4del(option);
+	  	};
+	  	
+	  	PageObj.update	= function(option){
+	  		
+	  		PageObj.prepend(option);
+	  		PageObj.delete(option);
+	  	};
 	  	
 	  	PageObj.init 	= function(option){
 	  		
@@ -183,6 +268,7 @@
 	 		
 	 		$table.html(buf.toString());
 	 		option.param = option.data;
+	 		 
 	 		PageObj.load(option);
 	  	};
 	   
@@ -204,12 +290,10 @@
 		  		
 		  		FunUtil.setBaseOption(option);
 			   	
-			   	FunUtil.cache4update(option);
-			   	
 			   	PageObj.init(option);
 		  	}
-			
 		};
+		
 		PageObj.pub(option);
   	};
 	

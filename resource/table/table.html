@@ -5,7 +5,7 @@
 		<title></title>
 		
 	<style>
-		.mins-btn-green{padding: 4px 23px 4px; background-color: #72d9c0; color: white; border-radius: 3px; cursor: pointer;}
+		.mins-btn-green{margin-right: 10px;padding: 4px 23px 4px; background-color: #72d9c0; color: white; border-radius: 3px; cursor: pointer;}
     	
 		.plug-table{width: 1157px;   margin: 37px 27px;color: #8d8d8d;}
     	.plug-table thead tr{background-color: #d4d4d4; height: 35px;text-align: center;}
@@ -20,7 +20,7 @@
 	<script   src="../base/base.js" ></script>
 	<script   src="table.js" ></script>
 	<script>
-	
+	var $table =$("#mins-monitor-task");
 	var list4table = function(){
  		
  		var list = [];
@@ -56,10 +56,10 @@
  	
  	var formatter4OP = function(obj,value){
  		
- 		return "<span class='mins-btn-green'>查看详情</span>"
+ 		return "<span class='mins-btn-green ' stype='prepend'>上拼</span> <span class='mins-btn-green' stype='append'>下拼</span><span class='mins-btn-green' stype='del'>删除</span><span class='mins-btn-green' stype='update'>update</span>"
  	};
- 	
- 	$("#mins-monitor-task").qltable({
+ 	//prepend append del update
+ 	$table.qltable({
  		
  		colors:[],
  		columns:[{title:"任务编号",filed:"taskid"},
@@ -72,9 +72,37 @@
  		
  	});
  	
+ 	$table.delegate("span.mins-btn-green","click",function(){
+ 		
+ 		
+ 		var obj = {taskid:Math.random()*100,tasktime:"2016-08-11  16:30",taskobj:"asd"};
+ 			 
+ 		var id = $(this).closest("tr").attr("data-index");
+ 		
+ 		var PageObj = {
+ 			append:function(){
+ 				$table.qltable({"append":{id:id,data:[obj]}});
+ 			},
+ 			prepend:function(){
+ 				$table.qltable({"prepend":{id:id,data:[obj]}});
+ 			},
+ 			del:function(){
+ 				$table.qltable({"delete":{id:id}});
+ 			},
+ 			update:function(){
+ 				
+ 				$table.qltable({"update":{id:id,data:[obj]}});
+ 			}
+ 		};
+		
+		var stype = $(this).attr("stype");
+		
+		PageObj[stype]();
+ 	});
+ 	
+ 	
  	//$("#mins-monitor-task").qltable({"load":list4table2()});
  	
- 	$("#mins-monitor-task").qltable({"append":{id:1,data:[list4table2()[2]]}});
  	 
  
 		
