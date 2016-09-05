@@ -1,7 +1,7 @@
 (function($) {
 	
 	/****** 全局变量***********/
-  	var $table;
+  	
   	
 	
   	var PageInfo = {};
@@ -12,6 +12,8 @@
 	  	var HtmUtil = {};//对内的Html
 	  	var PageObj	= {};//对外暴露的方法
 	  	
+	  	var $table =  this;
+	  	
 	  	/*************HtmUtil 工具类************************** */
 	  	
 	  	HtmUtil.addTrs = function(option){
@@ -21,7 +23,7 @@
 	 		var len4col = columns.length;
 	 		var buf  	= new StringBuffer();
 	  		
-	  		var id4index= FunUtil.cache4getLen(); 
+	  		var id4index= FunUtil.indexMax(); 
 	  		
 	  		if(len4data === 0) return;
 	 		
@@ -52,9 +54,12 @@
 	  	
 	  	/*************FunUtil 工具类************************** */
 	  	
-	  	FunUtil.Glob = function(){
+	  	FunUtil.Glob = function(key,value){
 	  		
+	  		if(!String.hasText(value)) return $table.data(key);
+	  		$table.data(key,value);
 	  	};
+	  	
 		 
 		
 		FunUtil.setBaseOption	= function(option){
@@ -96,14 +101,27 @@
 	  	}
 	  	
 	  	
+	  	
+	  	FunUtil.indexMax	= function(){
+	  		
+	  		var Map = FunUtil.cache4get().Map;
+	  		var max = 0;
+	  		
+	  		for(var p in Map){
+	  			
+	  			max = Math.max(max,parseInt(p));
+	  		};
+	  		
+	  		return (max+1);
+	  	}
 	  	//得到缓存数据
 	  	FunUtil.cache4get = function(){
 	  		
-	  	  return $table.data("qltable-option");
+	  	  return $table.data("option");
 	  	};
 	  	FunUtil.cache4getLen = function(){
 	  		
-	  	  return $table.data("qltable-option").data.length;
+	  	  return $table.data("option").data.length;
 	  	};
 	  	
 	  	/****************更新数据缓存****************/
@@ -119,22 +137,21 @@
 	  		
 	  		option.Map = Map;  
 	  		
-	  		$table.data("qltable-option",option);
+	  		$table.data("option",option);
 	  	};
 	  	
 	  	FunUtil.cache4append = function(option){
 	  		var cache 	= FunUtil.cache4get();
 	  		var Map 	= cache.Map;
 	  		var data 	= cache.data;
-	  		var obj 	= option.param[0];
+	  		var obj 	= option.param.data[0];
 	  		var id4index= (data.length +1);
 	  		
 	  		Map[id4index] = obj;
 	  		
 	  		cache.Map 	= Map;
-	  		//cache.data.push(obj);
-	  		
-	  		$table.data("qltable-option",cache);
+	  		cache.data.push(obj);
+	  		$table.data("option",cache);
 	  	};
 	  	
 	  	FunUtil.cache4prepend = function(option){
@@ -155,7 +172,7 @@
 	  		
 	  		cache.Map  = Map;
 	  		
-	  	    $table.data("qltable-option",cache);
+	  	    $table.data("option",cache);
 	  	};
 	  	
 	  	FunUtil.cache4load = function(option){
@@ -280,7 +297,7 @@
 		  		
 		  		for(var p in option){ method = p; data   = option[p];  }
 		  		 
-		  		option = $table.data("qltable-option") ;
+		  		option = FunUtil.Glob("option"); ;
 		  		option.param = data;//公共参数
 		  		
 		  		FunUtil.setBaseOption(option);
@@ -299,8 +316,8 @@
 	
 	$.fn.qltable = function(option) {
   	
-  		$table 		= this;
 	  	
-	  	PageInfo.init(option);
+	  	//PageInfo.init(this,option);
+	  	PageInfo.init.call(this,option);
  	};
 })(jQuery);

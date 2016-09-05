@@ -15,12 +15,21 @@
 	<body>
 		 <table id="mins-monitor-task" class="plug-table"> 
      	</table> 
+     	
+     	
+     	<table id="mins-monitor-task2" class="plug-table"> 
+     	</table> 
 	</body>
 	<script   src="../base/jquery-2.1.0.js"></script>
 	<script   src="../base/base.js" ></script>
 	<script   src="table.js" ></script>
 	<script>
-	var $table =$("#mins-monitor-task");
+	
+	
+	
+	
+	
+		
 	var list4table = function(){
  		
  		var list = [];
@@ -58,47 +67,97 @@
  		
  		return "<span class='mins-btn-green ' stype='prepend'>上拼</span> <span class='mins-btn-green' stype='append'>下拼</span><span class='mins-btn-green' stype='del'>删除</span><span class='mins-btn-green' stype='update'>update</span>"
  	};
+	
+	
+	var FunUtil = {};
+	
+	FunUtil.addEven = function($table){
+		
+		$table.undelegate("click").delegate("span.mins-btn-green","click",function(){
+	 		
+	 		
+	 		var obj = {taskid:Math.random()*100,tasktime:"2016-08-11  16:30",taskobj:"asd"};
+	 			 
+	 		var id = $(this).closest("tr").attr("data-index");
+	 		
+	 		var PageObj = {
+	 			append:function(){
+	 				$table.qltable({"append":{id:id,data:[obj]}});
+	 			},
+	 			prepend:function(){
+	 				$table.qltable({"prepend":{id:id,data:[obj]}});
+	 			},
+	 			del:function(){
+	 				$table.qltable({"delete":{id:id}});
+	 			},
+	 			update:function(){
+	 				
+	 				$table.qltable({"update":{id:id,data:[obj]}});
+	 			}
+	 		};
+			
+			var stype = $(this).attr("stype");
+			
+			PageObj[stype]();
+	 	});
+		
+	};
+	
+	
+	
+	var PageInfo = {};
+	
+	PageInfo.init = function(){
+		var $table =$("#mins-monitor-task");
+		
+		$table.qltable({
+	 		
+	 		colors:[],
+	 		columns:[{title:"任务编号",filed:"taskid"},
+	 				 {title:"检测对象",filed:"taskobj"},
+	 				 {title:"提交时间",filed:"tasktime"},
+	 				 {title:"操作" ,	 filed:"",formatter:formatter4OP}
+	 				],
+	 		
+	 		data:list4table(),
+	 		
+	 	});
+	 	
+	 	FunUtil.addEven($table);
+	 	
+	};
+	
+	PageInfo.init();
+	
+	PageInfo.init2 = function(){
+		
+		
+		var $table =$("#mins-monitor-task2");
+			
+			$table.qltable({
+		 		
+		 		colors:[],
+		 		columns:[{title:"任务编号",filed:"taskid"},
+		 				 {title:"检测对象",filed:"taskobj"},
+		 				 {title:"提交时间",filed:"tasktime"},
+		 				 {title:"操作" ,	 filed:"",formatter:formatter4OP}
+		 				],
+		 		
+		 		data:list4table(),
+		 		
+		 	});
+		  FunUtil.addEven($table);
+		
+	};
+	
+	PageInfo.init2();
+	
+	
+	
+	
+
  	//prepend append del update
- 	$table.qltable({
- 		
- 		colors:[],
- 		columns:[{title:"任务编号",filed:"taskid"},
- 				 {title:"检测对象",filed:"taskobj"},
- 				 {title:"提交时间",filed:"tasktime"},
- 				 {title:"操作" ,	 filed:"",formatter:formatter4OP}
- 				],
- 		
- 		data:list4table(),
- 		
- 	});
  	
- 	$table.delegate("span.mins-btn-green","click",function(){
- 		
- 		
- 		var obj = {taskid:Math.random()*100,tasktime:"2016-08-11  16:30",taskobj:"asd"};
- 			 
- 		var id = $(this).closest("tr").attr("data-index");
- 		
- 		var PageObj = {
- 			append:function(){
- 				$table.qltable({"append":{id:id,data:[obj]}});
- 			},
- 			prepend:function(){
- 				$table.qltable({"prepend":{id:id,data:[obj]}});
- 			},
- 			del:function(){
- 				$table.qltable({"delete":{id:id}});
- 			},
- 			update:function(){
- 				
- 				$table.qltable({"update":{id:id,data:[obj]}});
- 			}
- 		};
-		
-		var stype = $(this).attr("stype");
-		
-		PageObj[stype]();
- 	});
  	
  	
  	//$("#mins-monitor-task").qltable({"load":list4table2()});
