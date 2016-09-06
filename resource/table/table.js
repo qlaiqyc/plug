@@ -285,6 +285,12 @@
 	 		
 	 		$table.html(buf.toString());
 	 		option.param = option.data;
+	 		
+	 		if(String.hasText(option.pageshow)){
+	 			$table.find("tbody").after("<tfoot><div></div><tfoot>")
+	 			
+	 			
+	 		}
 	 		 
 	 		PageObj.load(option);
 	  	};
