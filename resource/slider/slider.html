@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+	<style>
+	.plug-silder{
+		    height: 20px;
+    background-color: blue;
+	}
+	 .plug-silder .plug-silder-normal{
+	 	    width: 35px;
+    height: 20px;
+     
+    display: block;
+    float: left;
+    text-align: center;
+	 cursor: pointer;
+	 }
+	 .plug-silder .plug-silder-util{
+	 	    width: 20px;
+    display: block;
+    height: 27px;
+    float: left;
+    margin-top: -3px;    position: absolute;
+    background-color: yellow;
+	 }
+	 .plug-silder span i{
+	 	
+	 	
+	 }
+	.plug-silder .bg-color-red{
+		background-color: red;
+	} 
+	</style>
+	</head>
+	<body>
+	 <div>
+	 	 <div class="plug-silder">
+	 	 	<span class="plug-silder-util"><i></i><i></i></span>
+	 	 	<span class="plug-silder-normal">1</span>
+	 	 	<span class="plug-silder-normal">2</span>
+	 	 	<span class="plug-silder-normal">3</span>
+	 	 	<span class="plug-silder-normal">4</span>
+	 	 	<span class="plug-silder-normal">5</span>
+	 	 	
+	 	 </div>
+	 </div>
+	</body>
+	<script   src="../base/jquery-2.1.0.js"></script>
+	<script   src="../base/base.js" ></script>
+	<script   src="slider.js" ></script>
+	<script>
+// /mouseup mousemove
+ $("div.plug-silder").find("span.plug-silder-util").on("mousemove",function(e){
+ 	var $this = $(this);
+ 	var left = "left:"+e.pageX+"px" ;
+ 	if(e.pageX > 170) return;
+ 	console.log(left);
+ 	$this.attr("style",left)
+ 	
+ 	//$(this).addClass("bg-color-red").prevAll("span.plug-silder-normal").addClass("bg-color-red");
+ 	
+ });
+ 
+		
+		
+	</script>
+
+</html>
