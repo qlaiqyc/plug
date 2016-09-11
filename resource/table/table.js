@@ -1,9 +1,5 @@
 (function($) {
 	
-	/****** 全局变量***********/
-  	
-  	
-	
   	var PageInfo = {};
   	
   	
@@ -13,8 +9,27 @@
 	  	var PageObj	= {};//对外暴露的方法
 	  	
 	  	var $table =  this;
+	  	var $head,$content,$foot;
 	  	
 	  	/*************HtmUtil 工具类************************** */
+	  	
+	  	HtmUtil.init = function(){
+	  		var buf  	= new StringBuffer();
+	  		
+	  		buf.append('<div class="plug-table">         ');
+			buf.append('   <div class="plug-table-head" style="width:100%"> ');
+			buf.append('    <table style="width:100%">  <thead> </thead></table>              ');
+			buf.append('   </div>                        ');
+			buf.append('   <div class="plug-table-body"> ');
+			buf.append('    <table style="width:100%"><thead> </thead>  <tbody> </tbody></table>              ');
+			buf.append('   </div>                        ');
+			buf.append('   <div class="plug-table-foot"> ');
+			buf.append('    <table></table>              ');
+			buf.append('   </div>                        ');
+			buf.append('</div>							');
+				  		
+	  		return buf.toString();
+	  	};
 	  	
 	  	HtmUtil.addTrs = function(option){
 	  		var data 	= option.param.data;
@@ -38,11 +53,11 @@
 					
 					var value = "";
 					
-					try{ String.hasText(obj[columns[j].filed]) ? value = obj[columns[j].filed] : value = ""; }catch(e){ };
+					try{ String.HasText(obj[columns[j].filed]) ? value = obj[columns[j].filed] : value = ""; }catch(e){ };
 					
 					try{ value = columns[j].formatter(obj,value); }catch(e){};
 					
-		 			buf.append('<td>'+value+'</td>')
+		 			buf.append('<td style="'+FunUtil.setcss({"columns":columns[j].width,"align":option.align})+'">'+value+'</td>')
 		 		}
 		 		
 		 		buf.append('</tr>');
@@ -56,10 +71,19 @@
 	  	
 	  	FunUtil.Glob = function(key,value){
 	  		
-	  		if(!String.hasText(value)) return $table.data(key);
+	  		if(!String.HasText(value)) return $table.data(key);
 	  		$table.data(key,value);
 	  	};
 	  	
+		 
+		 FunUtil.setcss = function(param){
+		 	var width 	= param.columns;
+		 	var align  = param.align;
+		 	
+		 	var setcss = "word-break: break-all;width:"+(String.HasText(width) ? width:"50%")+";text-align:"+(String.HasText(align) ? align:"");
+	 			
+	 		return setcss;
+		 };
 		 
 		
 		FunUtil.setBaseOption	= function(option){
@@ -76,7 +100,7 @@
 	  		try{
 	  			for(var p in option){ method = p; data   = option[p]; return; }
 	  			
-	  			if(String.hasText(method)) fn = methods[method]();
+	  			if(String.HasText(method)) fn = methods[method]();
 	  		}catch(e){
 	  			//TODO handle the exception
 	  		}
@@ -200,17 +224,19 @@
 					
 					var value = "";
 					
-					try{ String.hasText(obj[columns[j].filed]) ? value = obj[columns[j].filed] : value = ""; }catch(e){ };
+					
+					try{ String.HasText(obj[columns[j].filed]) ? value = obj[columns[j].filed] : value = ""; }catch(e){ };
 					
 					try{ value = columns[j].formatter(obj,value); }catch(e){};
 					
-		 			buf.append('<td>'+value+'</td>')
+		 			buf.append('<td style="'+FunUtil.setcss({"columns":columns[j].width,"align":option.align})+'">'+value+'</td>');
+		 			
 		 		}
 		 		
 		 		buf.append('</tr>');
 		 	}
 		 		
-	  		$table.find("tbody").html(buf.toString());
+	  		$content.html(buf.toString());
 	  		
 	  		FunUtil.cache4load(option);
 	  	};
@@ -239,7 +265,7 @@
 	  		FunUtil.cache4prepend(option);
 	  	};
 	  	
-	  	PageObj.delete	= function(option){
+	  	PageObj.del	= function(option){
 	  		//删除列表以逗号分割
 	  		
 	  		var param = option.param;
@@ -254,50 +280,56 @@
 	  	PageObj.update	= function(option){
 	  		
 	  		PageObj.prepend(option);
-	  		PageObj.delete(option);
+	  		PageObj.del(option);
 	  	};
 	  	
 	  	PageObj.init 	= function(option){
 	  		
+	  		$table.html(HtmUtil.init());//初始化结构
+			
+			$head 	= $table.find("div.plug-table-head table thead");
+		  	$foot	= $table.find("div.plug-table-foot table tfoot");
+		  	$content= $table.find("div.plug-table-body table tbody");
+			
+			
 	  		var data 	= option.data;
 	 		var columns = option.columns;
 	 		var len4col = columns.length;
 	 		var len4data= data.length;
 	 		
+	 		
 	 		//首行
 	 		var buf  = new StringBuffer();
 	 		
-	 		buf.append(" <thead> <tr>");
+	 		buf.append(" <tr>");
 	 		
 	 		for(var i =0 ;i<len4col;i++){
 	 			var obj = columns[i];
 	 			
-	 			var str = '<th  data-field="'+obj.filed+'">'+obj.title+'</th>';
 	 			
-	 			if(String.hasText(obj.formatter)) str = ('<th data-formatter="'+obj.formatter.name+'" data-field="'+obj.filed+'">'+obj.title+'</th>');
+	 			var str = '<th  data-field="'+obj.filed+'"  style="'+FunUtil.setcss({"columns":columns[i].width,"align":option.align})+'">'+obj.title+'</th>';
+	 			
+	 			if(String.HasText(obj.formatter)) str = ('<th data-formatter="'+obj.formatter.name+'" data-field="'+obj.filed+'"  style="'+FunUtil.setcss({"columns":columns[i].width,"align":option.align})+'">'+obj.title+'</th>');
 	 			 
 	 			buf.append(str);
 	 		}
 	 		
-	 		buf.append(" </tr> </thead>");
-	 		buf.append(" <tbody> ");
-	 		buf.append(" </tbody> ");
+	 		buf.append(" </tr>");
 	 		
-	 		$table.html(buf.toString());
+	 		
+	 		$head.html(buf.toString());
+	 		
+	 		//判断是否是固定高
+	 		if(String.HasText(option.height)) $content.closest("div").css({ "overflow-y": "auto", "height": option.height });
+	 		
 	 		option.param = option.data;
-	 		
-	 		if(String.hasText(option.pageshow)){
-	 			$table.find("tbody").after("<tfoot><div></div><tfoot>")
-	 			
-	 			
-	 		}
 	 		 
 	 		PageObj.load(option);
 	  	};
 	   
 		PageObj.pub 	= function(option){
 			
-			if(!String.hasText(option.columns)){
+			if(!String.HasText(option.columns)){
 		  		
 		  		var method,data;
 		  		
@@ -320,10 +352,11 @@
 		PageObj.pub(option);
   	};
 	
-	$.fn.qltable = function(option) {
+	$.fn.xdntable = function(option) {
   	
 	  	
 	  	//PageInfo.init(this,option);
 	  	PageInfo.init.call(this,option);
  	};
 })(jQuery);
+

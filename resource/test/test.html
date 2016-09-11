@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>菜鸟教程(runoob.com)</title> 
+<style>
+	.main {
+	width:400px;height:300px;border:0px solid #0F0F0F;overflow:hidden;
+}
+.parent {
+	height:300px;width:1600px;position:relative;
+}
+.sub {
+	width:398px;
+	*width:400px;
+	height:298px;border:1px solid #00FFFF;float:left;
+}
+	
+	
+</style>
+<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+
+</head>
+<body>
+  
+	<div class="main">
+		<div id="parent" class="parent">
+			<div id="sub1" class="sub" style="background:#00FF00;"></div>
+			<div id="sub2" class="sub" style="background:#0000FF;"></div>
+			<div id="sub3" class="sub" style="background:#00FFFF;"></div>
+			<div id="sub3" class="sub" style="background:#FF0000;"></div>
+		</div>
+	</div>
+	<input type="button" onclick="slideleft();" value="slide"></input>
+<script type="text/javascript" src="../base/jquery-2.1.0.js" ></script>
+<script>
+function slideleft() {
+	$('#parent>div:first').animate({width:'0px'},2000,callback);
+}
+function callback() {
+	$('#parent>div:last').after($('#parent>div:first'));
+	$('#parent>div:last').css('width', '398px');
+}
+</script>
+</body>
+</html>

@@ -13,12 +13,12 @@
 	</style>
 	</head>
 	<body>
-		 <table id="mins-monitor-task" class="plug-table"> 
-     	</table> 
+		 <div id="mins-monitor-task" class="plug-table"> 
+     	</div> 
      	
      	
-     	<table id="mins-monitor-task2" class="plug-table"> 
-     	</table> 
+     	<div id="mins-monitor-task2" class="plug-table"> 
+     	</div> 
 	</body>
 	<script   src="../base/jquery-2.1.0.js"></script>
 	<script   src="../base/base.js" ></script>
@@ -82,17 +82,17 @@
 	 		
 	 		var PageObj = {
 	 			append:function(){
-	 				$table.qltable({"append":{id:id,data:[obj]}});
+	 				$table.xdntable({"append":{id:id,data:[obj]}});
 	 			},
 	 			prepend:function(){
-	 				$table.qltable({"prepend":{id:id,data:[obj]}});
+	 				$table.xdntable({"prepend":{id:id,data:[obj]}});
 	 			},
 	 			del:function(){
-	 				$table.qltable({"delete":{id:id}});
+	 				$table.xdntable({"del":{id:id}});
 	 			},
 	 			update:function(){
 	 				
-	 				$table.qltable({"update":{id:id,data:[obj]}});
+	 				$table.xdntable({"update":{id:id,data:[obj]}});
 	 			}
 	 		};
 			
@@ -110,14 +110,14 @@
 	PageInfo.init = function(){
 		var $table =$("#mins-monitor-task");
 		
-		$table.qltable({
-	 		
+		$table.xdntable({
+	 		height:"200px",
+	 		align:"left",
 	 		colors:[],
-	 		pageshow:true,
-	 		columns:[{title:"任务编号",filed:"taskid"},
-	 				 {title:"检测对象",filed:"taskobj"},
-	 				 {title:"提交时间",filed:"tasktime"},
-	 				 {title:"操作" ,	 filed:"",formatter:formatter4OP}
+	 		columns:[{title:"任务编号",width:"10%",filed:"taskid"},
+	 				 {title:"检测对象",width:"20%",filed:"taskobj"},
+	 				 {title:"提交时间",width:"30%",filed:"tasktime"},
+	 				 {title:"操作" ,	width:"40%",filed:"",formatter:formatter4OP}
 	 				],
 	 		
 	 		data:list4table(),
@@ -135,15 +135,14 @@
 		
 		var $table =$("#mins-monitor-task2");
 			
-			$table.qltable({
+			$table.xdntable({
 		 		
 		 		colors:[],
-		 		pageshow:true,
-		 		columns:[{title:"任务编号",filed:"taskid"},
-		 				 {title:"检测对象",filed:"taskobj"},
-		 				 {title:"提交时间",filed:"tasktime"},
-		 				 {title:"操作" ,	 filed:"",formatter:formatter4OP}
-		 				],
+		 		columns:[{title:"任务编号",width:"10%",filed:"taskid"},
+	 				 {title:"检测对象",width:"20%",filed:"taskobj"},
+	 				 {title:"提交时间",width:"30%",filed:"tasktime"},
+	 				 {title:"操作" ,	width:"40%",filed:"",formatter:formatter4OP}
+	 				],
 		 		
 		 		data:list4table(),
 		 		
@@ -152,7 +151,7 @@
 		
 	};
 	
-	PageInfo.init2();
+	PageInfo.init2(); 
 	
 	
 	
@@ -162,7 +161,7 @@
  	
  	
  	
- 	//$("#mins-monitor-task").qltable({"load":list4table2()});
+ 	//$("#mins-monitor-task").xdntable({"load":list4table2()});
  	
  	 
  

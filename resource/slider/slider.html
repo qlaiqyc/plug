@@ -25,14 +25,27 @@
     float: left;
     margin-top: -3px;    position: absolute;
     background-color: yellow;
+        padding-right: 10px;
 	 }
-	 .plug-silder span i{
-	 	
-	 	
-	 }
+ 
 	.plug-silder .bg-color-red{
 		background-color: red;
 	} 
+	
+	/* */
+	.plug-slider{
+		 margin-top: 100px;
+    height: 20px;
+    background-color: blue;
+	}
+	
+	.plug-slider span{display: block;
+    height: 30px;
+    background-color: red;
+    width: 20px;
+    position: absolute;
+    cursor: pointer;
+    }
 	</style>
 	</head>
 	<body>
@@ -46,6 +59,16 @@
 	 	 	<span class="plug-silder-normal">5</span>
 	 	 	
 	 	 </div>
+	 	 
+	 	 <div class="plug-slider" >
+	 	 	<span ></span>
+	 	 	
+	 	 	
+	 	 </div>
+	 	 
+	 	 
+	 	 <button id="left">«</button> <button id="right">»</button>
+<div class="block"></div>
 	 </div>
 	</body>
 	<script   src="../base/jquery-2.1.0.js"></script>
@@ -53,19 +76,57 @@
 	<script   src="slider.js" ></script>
 	<script>
 // /mouseup mousemove
- $("div.plug-silder").find("span.plug-silder-util").on("mousemove",function(e){
+ $("div.plug-silder").find("span.plug-silder-util").on("mousedown",function(e){
  	var $this = $(this);
- 	var left = "left:"+e.pageX+"px" ;
- 	if(e.pageX > 170) return;
- 	console.log(left);
- 	$this.attr("style",left)
+ 	var sx= e.pageX
+ 	
+ 	
+ 	
+ 	$this.bind("mousemove",function(k){
+ 		var left = "left:"+(k.pageX - sx)+"px" ;
+ 	 
+ 		$this.attr("style",left)
+ 	});
+ 	
+ 	$this.on("mouseup",function(k){
+ 		$this.unbind("mousemove");
+ 	});
  	
  	//$(this).addClass("bg-color-red").prevAll("span.plug-silder-normal").addClass("bg-color-red");
  	
  });
  
 		
-		
+	 $("div.plug-slider").find("span").on("mousedown",function(e){
+ 		var $this = $(this);
+ 	var sx = e.pageX; 
+ 	
+ 	$this.bind("mousemove",function(k){
+ 		var x = k.pageX;
+ 		if((k.pageX - sx) < 0) x = (x-15) ;
+ 		sx = k.pageX;
+ 		
+ 		var left = "left:"+(x)+"px" ;
+ 	 
+ 		$this.animate({"left": '+50px'}, "slow") //attr("style",left)
+ 	});
+  
+  $this.on("mouseup mouseleave ",function(k){
+  		var x = k.pageX;
+ 	 	if((k.pageX - sx) < 0) x = (x-10) ;
+ 		
+ 		var left = "left:"+(x)+"px" ;
+ 	 
+ 		$this.attr("style",left)
+  	
+ 		$this.unbind("mousemove");
+ 	});
+ 	
+ 	 
+ });
+ 
+ 
+ 
 	</script>
 
 </html>

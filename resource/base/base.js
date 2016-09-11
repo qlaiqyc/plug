@@ -13,7 +13,7 @@
 	};	
 	
 
-   String.hasText  = function(str){
+   String.HasText  = function(str){
    	if (typeof(str) == "undefined") return false;
 	if (str == null) return false;
 	if (str == 'null') return false;
