@@ -3,7 +3,74 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		
+	<style>
+	 .plug-slider-bar span{
+	 	
+	 	    width: 41px;
+    height: 34px;
+    background-color: cornflowerblue;
+    display: block;
+    float: left;
+    border-right: 1px solid red;
+    text-align: center;
+    padding-top: 8px;
+	 }
+	
+	.plug-slider-ball{
+		    width: 20px;
+    background-color: #b12222;
+    position: absolute;
+	}
+	</style>
 	</head>
 	<body>
+	  	<div class="plug-slider-bar">
+       		 <span class="min">0</span>
+       		 <span class="min">1</span>
+       		 <span class="min">2</span>
+       		 <span class="min">3</span>
+       		 <span class="min">4</span>
+       		 <span class="min">5</span>
+       		 <span class="plug-slider-ball">5</span>
+       		 
+       		 
+       		 
+    	</div>
 	</body>
+	<script   src="resource/base/jquery-2.1.0.js"></script>
+	<script   src="slider.js" ></script>
+	<script>
+	 	 var $ball = $("span.plug-slider-ball");
+	 	 
+	 	 $ball.on("mousedown",function(evt){
+	 	 	
+	 	 	var $this	= $(this);
+	    	var sold	= evt.clientX;
+	    	var sleft	= parseInt($this.css("left"));
+	    	
+	    	$("div.plug-slider-bar").on("mousemove",function(evt){ 
+	    		var x = evt.clientX - sold;
+	            
+	            $this.css("left",(sleft + x + "px"));
+	            
+	            if ( parseInt($this.css("left")) < 0) {
+	                $this.css("left",0);
+	            }
+	            if (parseInt($this.css("left")) > 400) {
+	               $this.css("left","400px");
+	            }
+	    	});
+	    	
+	    	 $ball.on("mouseup",function(){
+	    	 	$this.unbind("mousemove");
+	    	 });
+	 	 	
+	 	 	
+	 	 });
+	 	 
+	 	 
+ 
+	</script>
+
 </html>

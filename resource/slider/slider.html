@@ -5,126 +5,48 @@
 		<title></title>
 		
 	<style>
-	.plug-silder{
-		    height: 20px;
-    background-color: blue;
-	}
-	 .plug-silder .plug-silder-normal{
-	 	    width: 35px;
-    height: 20px;
-     
-    display: block;
-    float: left;
-    text-align: center;
-	 cursor: pointer;
-	 }
-	 .plug-silder .plug-silder-util{
-	 	    width: 20px;
-    display: block;
-    height: 27px;
-    float: left;
-    margin-top: -3px;    position: absolute;
-    background-color: yellow;
-        padding-right: 10px;
-	 }
- 
-	.plug-silder .bg-color-red{
-		background-color: red;
-	} 
-	
-	/* */
-	.plug-slider{
-		 margin-top: 100px;
-    height: 20px;
-    background-color: blue;
-	}
-	
-	.plug-slider span{display: block;
-    height: 30px;
-    background-color: red;
-    width: 20px;
-    position: absolute;
-    cursor: pointer;
-    }
+	.plug-slider-bar{width:400px;height:15px;border-radius:1em;border:1px solid #aaa;background:linear-gradient(#e5e5e5,#f2f2f2) repeat scroll 0 0 #eee;position:relative}
+	.plug-slider-ball{display:block;width:28px;height:28px;border:1px solid grey;border-radius:1em;box-shadow:0 1px 3px rgba(0,0,0,0.2);background:linear-gradient(#fafafa,#f6f6f6) repeat scroll 0 0 #fff;position:absolute;top:50%;margin:-15px 0 0 -15px}
+	.min,.max{position:absolute}
+	.min{left:-30px}
+	.max{right:-60px}
+
 	</style>
 	</head>
 	<body>
-	 <div>
-	 	 <div class="plug-silder">
-	 	 	<span class="plug-silder-util"><i></i><i></i></span>
-	 	 	<span class="plug-silder-normal">1</span>
-	 	 	<span class="plug-silder-normal">2</span>
-	 	 	<span class="plug-silder-normal">3</span>
-	 	 	<span class="plug-silder-normal">4</span>
-	 	 	<span class="plug-silder-normal">5</span>
-	 	 	
-	 	 </div>
-	 	 
-	 	 <div class="plug-slider" >
-	 	 	<span ></span>
-	 	 	
-	 	 	
-	 	 </div>
-	 	 
-	 	 
-	 	 <button id="left">«</button> <button id="right">»</button>
-<div class="block"></div>
-	 </div>
+	  	<div class="plug-slider-bar">
+       		 <span class="min">0</span><span class="plug-slider-ball"></span><span class="max">1000</span>
+    	</div>
 	</body>
 	<script   src="../base/jquery-2.1.0.js"></script>
 	<script   src="../base/base.js" ></script>
 	<script   src="slider.js" ></script>
 	<script>
-// /mouseup mousemove
- $("div.plug-silder").find("span.plug-silder-util").on("mousedown",function(e){
- 	var $this = $(this);
- 	var sx= e.pageX
- 	
- 	
- 	
- 	$this.bind("mousemove",function(k){
- 		var left = "left:"+(k.pageX - sx)+"px" ;
- 	 
- 		$this.attr("style",left)
- 	});
- 	
- 	$this.on("mouseup",function(k){
- 		$this.unbind("mousemove");
- 	});
- 	
- 	//$(this).addClass("bg-color-red").prevAll("span.plug-silder-normal").addClass("bg-color-red");
- 	
- });
- 
-		
-	 $("div.plug-slider").find("span").on("mousedown",function(e){
- 		var $this = $(this);
- 	var sx = e.pageX; 
- 	
- 	$this.bind("mousemove",function(k){
- 		var x = k.pageX;
- 		if((k.pageX - sx) < 0) x = (x-15) ;
- 		sx = k.pageX;
- 		
- 		var left = "left:"+(x)+"px" ;
- 	 
- 		$this.animate({"left": '+50px'}, "slow") //attr("style",left)
- 	});
-  
-  $this.on("mouseup mouseleave ",function(k){
-  		var x = k.pageX;
- 	 	if((k.pageX - sx) < 0) x = (x-10) ;
- 		
- 		var left = "left:"+(x)+"px" ;
- 	 
- 		$this.attr("style",left)
-  	
- 		$this.unbind("mousemove");
- 	});
- 	
- 	 
- });
- 
+	 	var $slider = $("span.plug-slider-ball");
+	    $slider.css("left","10px");
+	    
+	    $slider.on("mousedown",function(evt){
+	    	var $this	= $(this);
+	    	var sold	= evt.clientX;
+	    	var sleft	= parseInt($this.css("left"));
+	    	
+	    	$("div.plug-slider-bar").on("mousemove",function(evt){ 
+	    		var x = evt.clientX - sold;
+	            
+	            $this.css("left",(sleft + x + "px"));
+	            
+	            if ( parseInt($this.css("left")) < 0) {
+	                $this.css("left",0);
+	            }
+	            if (parseInt($this.css("left")) > 400) {
+	               $this.css("left","400px");
+	            }
+	    	});
+	    	
+	    	 $slider.on("mouseup",function(){
+	    	 	$this.unbind("mousemove");
+	    	 });
+	    });
  
  
 	</script>
