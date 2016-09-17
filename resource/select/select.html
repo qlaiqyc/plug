@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+	</head>
+	<style>
+		.block-hide{display: none !important;}
+		.block-show{display: block !important;}
+		.plug-select{position: absolute; background-color: white; width: 171px; border: 1px solid #d4d4d4; z-index: 2; margin-top: -1px;}
+		.plug-select ul{padding: 0;min-height: 20px;}
+		.plug-select li{ padding-left: 5px; color: #979797;list-style-type: none;}
+		.plug-select li:hover{ background-color: #f6f6f6;}
+		.plug-select:focus{border:1px solid #e3e3e3;outline: none !important;}
+	</style>
+	<body>
+	
+	    <div class="plug-select-div">
+	        <input type="text" class="plug-select-input mins-new-link-rate" data="select-cyc" placeholder="10分钟" svalue="10"> <span class="mins-icon mins-icon-allow"></span>
+	        <div class="select-rate plug-select block-hide" tabindex="-1">
+	            <ul>
+	                <li soption="5"> <span>5分钟</span></li>
+	                <li soption="10"><span>10分钟</span></li>
+	                <li soption="30"><span>30分钟</span></li>
+	                <li soption="60"><span>60分钟</span></li>
+	            </ul>
+	        </div>
+	    </div>
+	</body>
+	
+	<script type="text/javascript" src="../base/jquery-2.1.0.js" ></script>
+	<script>
+ 			$("body").delegate("input.plug-select-input","click",function(event){
+ 				var $this 	= $(this);
+ 				var $select = $this.closest("div").find("div.plug-select");
+ 				var $ul		= $select.find("ul")
+	 			
+	 			$select.toggleClass("block-show");
+				
+				$select.focus();
+				
+ 				$select.find("li").unbind("click").bind("click",function(){
+ 					
+ 					var $li = $(this);
+	 				$this.val($li.text()).attr("svalue",$li.attr("soption")).change();
+	 				$select.removeClass("block-show");
+	 				
+ 				});
+ 		 
+ 			 	$select.unbind("blur").bind("blur",function(){
+ 					$select.removeClass("block-show");
+ 				});  
+ 			});
+	</script>
+</html>
