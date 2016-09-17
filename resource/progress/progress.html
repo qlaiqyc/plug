@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		.plug-progress{width: 400px; background-color: #999; height: 20px; border-radius: 8px;}
+		.plug-progress-bar{ background-color: cornflowerblue; height: 20px; width: 0%; border-radius: 9px;}
+	</style>
+	<body>
+		
+		<div class="plug-progress">
+			<div class="plug-progress-bar"></div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../base/jquery-2.1.0.js" ></script>
+	<script>
+		$("div.plug-progress-bar").animate({ width: "60%"},1000);
+		
+	</script>
+</html>
