@@ -1,33 +1,74 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<script src="resource/base/jquery-2.1.0.js"></script>
-</head>
- 
-<body>
-<div id="frist">
-    <ul>
-        <li><a href="#" name="f1">one</a></li>
-        <li><a href="#" name="f2">two</a></li>
-    </ul>
-</div>
- 
-<div id="second">
-    <ul>
-        <li><div href="#" name="f3">Three</a></li>
-        <li><div href="#" name="f4">four</a></li>
-    </ul>
-</div>
-<script>
-$(document).ready(function(){
-    //当焦点离开已选的a时触发
-    $("a[name^='f']").blur(function (){
-        $(this).parent().parent().css("display","none");
-    }); 
- 
-});
-</script>
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title>DivCSS实现居中的半透明弹出层</title> 
+<style type="text/css"> 
+<!-- 
+html,body {height:100%; margin:0px; font-size:12px;} 
+.mydiv { 
+background-color: #FFCC66; 
+border: 1px solid #f00; 
+text-align: center; 
+line-height: 40px; 
+font-size: 12px; 
+font-weight: bold; 
+z-index:999; 
+width: 300px; 
+height: 120px; 
+left:50%; 
+top:50%; 
+margin-left:-150px!important;/*FF IE7 该值为本身宽的一半 */ 
+margin-top:-60px!important;/*FF IE7 该值为本身高的一半*/ 
+margin-top:0px; 
+position:fixed!important;/* FF IE7*/ 
+position:absolute;/*IE6*/ 
+_top: expression(eval(document.compatMode && 
+document.compatMode=='CSS1Compat') ? 
+documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/ 
+document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/ 
+} 
+.bg,.popIframe { 
+background-color: #666; display:none; 
+width: 100%; 
+height: 100%; 
+left:0; 
+top:0;/*FF IE7*/ 
+filter:alpha(opacity=50);/*IE*/ 
+opacity:0.5;/*FF*/ 
+z-index:1; 
+position:fixed!important;/*FF IE7*/ 
+position:absolute;/*IE6*/ 
+_top: expression(eval(document.compatMode && 
+document.compatMode=='CSS1Compat') ? 
+documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/ 
+document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2); 
+} 
+.popIframe { 
+filter:alpha(opacity=0);/*IE*/ 
+opacity:0;/*FF*/ 
+} 
+--> 
+</style> 
+<script language="javascript" type="text/javascript"> 
+function showDiv(){ 
+document.getElementById('popDiv').style.display='block'; 
+document.getElementById('popIframe').style.display='block'; 
+document.getElementById('bg').style.display='block'; 
+} 
+function closeDiv(){ 
+document.getElementById('popDiv').style.display='none'; 
+document.getElementById('bg').style.display='none'; 
+document.getElementById('popIframe').style.display='none'; 
+} 
+</script> 
+</head> 
+<body> 
+<div id="popDiv" class="mydiv" style="display:none;">CSS教程欢迎你！ 
+欢迎来到源码爱好者网站。
+<a href="javascript:closeDiv()">关闭窗口</a></div> 
+<div id="bg" class="bg" style="display:none;"></div> 
+<a href="javascript:showDiv()">点击这里弹出层</a> 
+<iframe id='popIframe' class='popIframe' frameborder='0' ></iframe> 
+</body> 
 </html>

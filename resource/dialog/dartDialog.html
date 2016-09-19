@@ -6,11 +6,12 @@
 	</head>
 	<link rel="stylesheet" href="css/animate.css" />
 	<style>
+		body{ font: 12px/1.5 arial,\5b8b\4f53,georgia,verdana,helvetica,sans-serif; }
 		.float-left{float: left;}
 		.float-right{float: right;}
 		.plug-dialog{position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1040;  overflow: hidden; -webkit-overflow-scrolling: touch; outline: 0;  border: 1px solid #ececec;  }
 		.plug-dialog-back{position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: #000; opacity: 0.5;}
-		.plug-dialog-contents{ background-color: white; }
+		.plug-dialog-contents{ /*background-color: white;*/ }
 		.plug-dialog-head{height: 21px; background-color: blanchedalmond;padding: 10px 0px 10px 10px;}
 		
 		.plug-dialog-cancle{background: url(img/plug-dialog.ico) no-repeat; width: 21px; height: 18px; background-size: 19px; cursor: pointer;}
@@ -18,6 +19,7 @@
 	<body>
 		
 		<dir id="plug-dialog-test"></dir>
+		
 	</body>
 	<script type="text/javascript" src="../base/jquery-2.1.0.js" ></script>
 	<script type="text/javascript" src="../base/base.js" ></script>
@@ -26,6 +28,10 @@
 		var buf = new StringBuffer();
 		
 		
+		
+		
+		
+		/*
 		$("#plug-dialog-test").xdndialog({
 			title:"我是好人",
 			width:"400",
@@ -33,8 +39,9 @@
 			animate:["bounceIn","flipOutY"],
 			body:"",
 			callback:function(){},
-		});
+		});*/
 		
+		$("#plug-dialog-test").xdndialog("hint","玩命提示中");
 		
 	</script>
 </html>
