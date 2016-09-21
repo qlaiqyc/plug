@@ -1,6 +1,9 @@
 (function($) {
 	/****
 	 * 1.常用方法
+	 * loading		加载中
+	 * hint			提示信息
+	 * 
 	 * **************************/
   	var PageInfo = {};
   	
@@ -15,28 +18,101 @@
 	  	
 	  	HtmUtil.init =  function(option){
 	  		var buf = new StringBuffer();
-	  		var isShowHead = (String.HasText(option.headshow) && option.headshow == "false");
 	  		
 	  		buf.append('<div class="plug-dialog">                               ');  
-	  		
-	  		buf.append('    <div class="plug-dialog-back"></div>                '); 
+	  	
+	  			
+	  		if(option.back.show == "true")	{
+	  			buf.append('    <div class="plug-dialog-back"></div>                ');
+	  		}
 	  		
 			buf.append('	<div class="plug-dialog-contents "  >                  ');  
 			
-			if(!isShowHead){
+			if(option.head.show == "true"){
 				
 				buf.append('		<div class="plug-dialog-head">                  ');   
-				buf.append('			<span class="float-left">'+option.title+'</span>  ');   
-				buf.append('            <span class="float-right plug-dialog-cancle"></span>          ');   
+				buf.append('			<span class="float-left">'+option.head.title+'</span>  ');   
+				
+				if(option.head.cancle == "true"){
+					buf.append('            <span class="float-right plug-dialog-cancle"></span>          ');   
+				}
 				buf.append('		</div>   ');
 			}
 			
-			buf.append('		<div class="plug-dialog-body">'+option.body+'</div>     ');
+			buf.append('		<div class="plug-dialog-body" style="background-color:'+option.body.color+'">'+option.body.buf+'</div>     ');
 			buf.append('        <div class="plug-dialog-foot"></div>            ');   
 			buf.append('    </div>                                              ');   
 			buf.append('</div>													');							
 			
 			return buf.toString();
+	  	};
+	  	
+	  	HtmUtil.string4msg = function(param){
+	  		
+	  		var buf = new StringBuffer();
+	  		
+	  		buf.append('<div style="background-color: rgba(0,0, 0, 0.3); color: white; padding: 9px;  border-radius: 3px; text-align: center;">');
+	  		buf.append(param);
+	  		buf.append("</div>");
+	  		
+	  		return buf.toString();
+	  	};
+	  	
+	  	
+	  	FunUtil.setBaseOption = function(param){
+	  		//设置默认样式
+	  		var CssUtil 	= {};
+	  		
+	  		//设置option 基本参数
+	  		
+	  		var base 		= {};
+	  		
+	  		base.back		= {show:"true",color:""};
+	  		base.head		= {show:"true",color:"",title:"提示信息",cancle:"true"};
+	  		base.body		= {color:"#fff",buf:"",fiex:"false",callback:function(){},};//固定是否
+	  		base.height		= 100;
+	  		base.width		= 100;
+	  		base.animate	= ["bounceIn","flipOutY"];
+	  		
+	  		
+	  		
+	  		if(String.HasText(param.back)){
+	  			
+	  			if(String.HasText(param.back.show))  base.back.show		= param.back.show ;
+	  			if(String.HasText(param.back.color)) base.back.color	= param.back.color ;;
+	  		};
+			
+			if(String.HasText(param.head)){
+	  			if(String.HasText(param.head.show))	 base.head.show		= param.head.show ;
+	  			if(String.HasText(param.head.color)) base.head.color	= param.head.color ;
+	  			if(String.HasText(param.head.title)) base.head.title	= param.head.title ;
+	  			if(String.HasText(param.head.cancle))base.head.cancle	= param.head.cancle ;
+	  		};
+	  		
+	  		if(String.HasText(param.body)){
+	  			
+	  			if(String.HasText(param.body.color))base.body.color		= param.body.color;
+	  			if(String.HasText(param.body.buf)) 	base.body.buf		= param.body.buf;
+	  			if(String.HasText(param.body.fiex)) base.body.fiex		= param.body.fiex;
+	  			
+	  			if($.isFunction(param.body.callback))base.body.callback	= param.body.callback;
+	  		};
+	  		
+	  		if(String.HasText(param.height)) 		base.height			= param.height;
+	  		if(String.HasText(param.width)) 		base.width			= param.width;
+	  		
+	  		if(String.HasText(param.animate)){
+	  			
+	  			if(param.animate.length == 1) 		base.animate[0]		= param.animate[0];
+	  			if(param.animate.length == 2) 		base.animate		= param.animate;
+	  		};
+	  		
+	  		return base;
+	  	};
+	  	
+	  	FunUtil.common4hide = function(){
+	  		
+	  		$dialog.html("");
 	  	};
 	  	
 	  	FunUtil.common4propHeigth = function(option){
@@ -53,7 +129,7 @@
 	  	//
 	  	
 	  	PageObj.init = function(option){
-	  		
+			
 	  		$dialog.html(HtmUtil.init(option));
 	  		$content = $dialog.find("div.plug-dialog-contents");
 	  		FunUtil.common4propHeigth(option);
@@ -64,59 +140,83 @@
 	 			$content.removeClass("animated "+option.animate[0]);
 	 		},1000);
 	 		
-	 		//关闭动画
+	  		//关闭动画
 	 		$content.find("span.plug-dialog-cancle").unbind("click").bind("click",function(){
 	 			$content.addClass("animated "+option.animate[1]);
 		 		setTimeout(function(){
 		 			$content.removeClass("animated "+option.animate[1]);
-		 		},4000);
-	 		});
+		 		},2000);
+	 		}); 
 	 		
-	  		
+	  		try{ option.body.callback(); }catch(e){ }
 	  	};
 	  	
 	  	PageObj.loading = function(){
-	  		var param = {};
 	  		
-	  		param.headshow	= "false";		
-	  		param.height	= "100";
-	  		param.width		= "100";
-	  		param.body 		= '<img src="img/loading.gif" />';
-	  		param.cancle	= "false";
-	  		param.animate	= ["bounceInDown","flipOutY"];
-	  		PageObj.init(param);
+	  		var option 		= {};
 	  		
-	  	}	
+	  		option.back		= {"show":"false"};		
+	  		option.head		= {"show":"false"};		
+	  		option.height	= "100";
+	  		option.width	= "100";
+	  		option.body 	= {"buf":'<img src="img/loading.gif" />'};
+	  		option.animate	= ["bounceIn","flipOutY"];
+	  		
+	  		option = FunUtil.setBaseOption(option);
+	  		
+	  		PageObj.init(option);
+	  	};
 	  	
-	  	PageObj.hint = function(option){
-	  		var param = {};
+	  	PageObj.hide = function(){
 	  		
-	  		param.headshow	= "false";		
-	  		param.height	= "100";
-	  		param.width		= "150";
-	  		param.body 		= '<div style="background-color: rgba(0,0, 0, 0.3); color: white; padding: 9px;  border-radius: 3px; text-align: center;">'+option+'</div>';
-	  		param.cancle	= "false";
-	  		param.animate	= ["bounceInDown","flipOutY"];
-	  		PageObj.init(param);
+	  		FunUtil.common4hide();
+	  	};
+	  	
+	  	PageObj.msg = function(param){
 	  		
-	  		setTimeout(function(){
-	  			$content.find("span.plug-dialog-cancle").trigger("click");
-	  		},4000);
+	  		var isfiex	= "false";	
+	  		var buf		= "",callback;
+	  		
+	  		//是否固定
+	  		if(typeof(param) == "object") {
+	  			isfiex	= param.fiexd;
+	  			buf		= param.buf;
+	  			callback= param.callback;
+	  		}else{
+	  			buf = param;
+	  		}
+	  		
+	  		var option 		= {};
+	  		
+	  		option.back		= {"show":"false"};		
+	  		option.head		= {"show":"false"};		
+	  		option.height	= "500";
+	  		option.width	= "150";
+	  		option.body 	= {"buf":HtmUtil.string4msg(buf),"fiex":isfiex,"callback":callback}
+	  		option.animate	= ["flipInx","flipOutY"];
+	  		
+	  		option = FunUtil.setBaseOption(option);
+	  		
+	  		PageObj.init(option);
+	  		
+	  		if(isfiex == "false"){
+	  			setTimeout(function(){
+		  			$content.addClass("animated "+option.animate[1]);
+			 		setTimeout(function(){ $dialog.html(""); },1000);
+		  		},3000); 
+	  		}
+	  		
 	  	}
 	  	
 	  	
 	 	PageObj.pub 	= function(option,param){
 	 	 	
-	 	 	/****
-	 	 	 * String  默认常见弹出框
-	 	 	 * Option  定制特殊弹出框 
-	 	 	 * *********/
-			
 			if(typeof(option) == "string"){
 		  		 
 		  		PageObj[option](param);
 		  	}else{
 		  		
+				option = FunUtil.setBaseOption(option);
 			   	PageObj.init(option);
 		  	}
 		};

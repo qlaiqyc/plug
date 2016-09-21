@@ -6,17 +6,32 @@
 	</head>
 	<link rel="stylesheet" href="css/animate.css" />
 	<style>
-		body{ font: 12px/1.5 arial,\5b8b\4f53,georgia,verdana,helvetica,sans-serif; }
+		body{ font-family: "microsoft yahei"; }
 		.float-left{float: left;}
 		.float-right{float: right;}
-		.plug-dialog{position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1040;  overflow: hidden; -webkit-overflow-scrolling: touch; outline: 0;  border: 1px solid #ececec;  }
+		.plug-dialog{position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1040;  overflow: hidden; -webkit-overflow-scrolling: touch; outline: 0;  border: 1px solid #ececec;     box-shadow: 1px 1px 50px rgba(0,0,0,.3); }
 		.plug-dialog-back{position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: #000; opacity: 0.5;}
 		.plug-dialog-contents{ /*background-color: white;*/ }
 		.plug-dialog-head{height: 21px; background-color: blanchedalmond;padding: 10px 0px 10px 10px;}
-		
 		.plug-dialog-cancle{background: url(img/plug-dialog.ico) no-repeat; width: 21px; height: 18px; background-size: 19px; cursor: pointer;}
+	
+		.btn { display: inline-block; padding: 3px 15px; margin-bottom: 0; font-size: 14px; font-weight: 400; line-height: 1.42857143; text-align: center; white-space: nowrap; vertical-align: middle;  cursor: pointer;  background-image: none; border: 1px solid transparent; border-radius: 4px; }
+	  	.btn-primary { color: #fff; background-color: #428bca; border-color: #357ebd; }
+	  	.btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary { color: #fff; background-color: #3071a9; border-color: #285e8e; }
+		.btn-warning { color: #fff; background-color: #f0ad4e; border-color: #eea236; }
+		.btn-warning:hover, .btn-warning:focus, .btn-warning.focus, .btn-warning:active, .btn-warning.active, .open>.dropdown-toggle.btn-warning { color: #fff; background-color: #ec971f; border-color: #d58512; }
 	</style>
 	<body>
+		
+		<h1>My 弹出框</h1>
+			
+		<div  id="plug-dialog-item">
+			<span class="btn btn-primary" data-type="msg4base"> msg 基础提示</span>
+			<span class="btn btn-primary" data-type="msg4buf">	msg buf提示</span>
+			<span class="btn btn-primary" data-type="info4base">Info基础提示</span>
+			<span class="btn btn-primary" data-type="load4base">加载中</span>
+			
+		</div>
 		
 		<dir id="plug-dialog-test"></dir>
 		
@@ -25,7 +40,87 @@
 	<script type="text/javascript" src="../base/base.js" ></script>
 	<script type="text/javascript" src="dialog.js" ></script>
 	<script>
-		var buf = new StringBuffer();
+	
+		var HtmUtil = {};
+		
+		/**************Html展示**************************************/
+		HtmUtil.msg4buf = function(){
+			var buf = new StringBuffer();
+			buf.append('<div>我是好人</div>  ');
+			buf.append('	<div style=" margin-top: 15px; ">');
+			buf.append('	<span class="btn btn-primary" style=" margin-right: 6px; ">确定</span>');
+			buf.append('	<span class="btn btn-warning">取消</span>');
+			buf.append('</div>');
+			
+			return buf.toString();
+		};
+		
+		HtmUtil.info4base = function(){
+			
+			var buf = new StringBuffer();
+			
+			buf.append('<div style=" padding: 24px 0px 3px 21px; box-shadow: 2px 12px 10px rgba(0,0,0,.3);">');
+			buf.append(    '<div>您是如何看待前端开发？</div>  ');
+			buf.append(    '	<div style="margin: 30px auto 10px; display: table;">');
+			buf.append(    '	<span class="btn btn-primary" style=" margin-right: 9px; ">确定</span>');
+			buf.append(    '	<span class="btn btn-warning">取消</span>');
+			buf.append(    '</div>');
+			buf.append("</div>");
+			return buf.toString();
+		};
+		
+		/****************控制***********************************/
+		
+		var $main = $("#plug-dialog-item");
+		var $test = $("#plug-dialog-test");
+		
+		$main.delegate("span.btn","click",function(){
+			var type 		= $(this).attr("data-type");
+			var executeFun	= {};
+			
+			executeFun.msg4base = function(){
+				$test.xdndialog("msg","玩命提示中");
+			};
+			
+			executeFun.msg4buf = function(){
+				var callback = function(){
+					 
+					$test.find("span.btn").on("click",function(){
+						$test.xdndialog("hide");
+					});
+				};
+				
+				$test.xdndialog("msg",{"fiex":"true","buf":HtmUtil.msg4buf(),"callback":callback});
+			};
+			
+			executeFun.info4base = function(){
+								
+				$test.xdndialog({
+					 back:{show:false},
+					 head:{title:"提示信息"},// 
+					 height:600,
+					 width: 300,
+					 animate:["zoomIn","flipOutY"],
+					 body:{color:"#fff",buf:HtmUtil.info4base(),fiex:"false",callback:function(){
+						 $test.find("span.btn").on("click",function(){
+							$test.xdndialog("hide");
+						});
+					 },}
+				});
+			};
+			
+			
+			executeFun.load4base = function(){
+								
+				$test.xdndialog("loading")
+				
+			};
+			
+			
+			
+			
+			executeFun[type]();
+		});
 		
 		
 		
@@ -41,7 +136,7 @@
 			callback:function(){},
 		});*/
 		
-		$("#plug-dialog-test").xdndialog("hint","玩命提示中");
+		//$("#plug-dialog-test").xdndialog("msg","玩命提示中");
 		
 	</script>
 </html>
