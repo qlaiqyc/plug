@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	
+	
+	<style type="text/css">
+		body{
+			background-color: wheat;
+		}
+		.common-box{
+			width: 1210px;
+			height: 402px;
+			background-color: #000000;
+			margin: 0 auto;
+			overflow: hidden;
+		}
+		.common-silder{
+			width: 3000px;
+			height: 400px;
+		}
+		.common-silder-item{
+			width: 400px;
+			height: 400px;
+			border: 1px solid red;
+			background-color: white;
+			float: left;
+			font-size: 100px;
+			text-align: center;
+			line-height: 100px;
+			border-left: 0;
+		}
+		.common-silder-item:first-child{
+			border-left: 1px solid red;
+		}	
+		
+	</style>
+	
+	<body>
+		<div class="common-box">
+			<div class="common-silder">
+				<div class="common-silder-item">1</div>
+				<div class="common-silder-item">2</div>
+				<div class="common-silder-item">3</div>
+				<div class="common-silder-item">4</div>
+				<div class="common-silder-item">1</div>
+				<div class="common-silder-item">2</div>
+				<div class="common-silder-item">3</div>
+			</div>
+		</div>
+	</body>
+	<script src="jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		var FunUtil = {};
+		
+		FunUtil.common4silder = function(){
+			var $silder = $("div.common-silder");
+			var num 	= 0;
+			var time	= 1000;
+			
+			var execuFun = function(){
+				if(num == 2005){
+					
+					$silder.animate({"marginLeft": ("-"+0+'px')}, 0,"linear",function(){
+						num =0;
+						execuFun();
+						
+					});
+					return;
+				}
+				
+				$silder.animate({"marginLeft": ("-"+num+'px')}, time,"linear",function(){
+					num += 401;
+					if(num < 2800) setTimeout(function(){ execuFun(); 	},time);
+				});
+			};
+			
+			execuFun();
+			
+		};
+		FunUtil.common4silder();
+		
+		
+	</script>
+</html>
